@@ -1,15 +1,16 @@
-//Create variables here
 var dog,happyDog,database,food,foodStock;
+var database;
 function preload()
 {
-  dog=loadImage("images/dog.png");
-  happyDog=loadImage("images/dogImg1.png");
+  dogImage=loadImage("images/dog.png");
+  happyDogImage=loadImage("images/dogImg1.png");
 }
 
 function setup() {
   createCanvas(500, 500);
+  database=firebase.database();
   dog=createSprite(400,450,50,50);
-  dog.addImage("dog.png");
+  dog.addImage(dogImage);
   foodStock=database.ref('food');
   foodStock.on("20",readStock);
   
@@ -32,27 +33,32 @@ text("NOTE: PRESS UP_ARROW KEY TO FEED DRAGO MILK",220,220);
   }
   else
   {
-    happyDog=addImage("images/dogImg1.png");
+    happyDog=addImage(happyDogImage);
   }
   //add styles here
    
-}
- function readStock(data)
- {
-   food=data.val();
- }
-  
+} 
  function writeStock(x)
  {
-   if(x<0)
+   if(food<0)
    {
-     x=0
+     food=0
    }
 
    else
    {
-     x=x-1;
+     food=food-1;
    }
-  database.ref('/').update({food:x})
+  database.ref('food/foodStock').update({
+    food:x
+  })
 }
+
+function readStock(data)
+ {
+   food=data.val();
+   food.x=position.x;
+   food.y=position.y;
+   }
+
 
