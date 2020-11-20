@@ -2,17 +2,17 @@ var dog,happyDog,database,food,foodStock;
 var database;
 function preload()
 {
-  dogImage=loadImage("images/dog.png");
+  dogImage=loadImage("images/Dog.png");
   happyDogImage=loadImage("images/dogImg1.png");
 }
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(1200, 1200);
   database=firebase.database();
   dog=createSprite(400,450,50,50);
   dog.addImage(dogImage);
   foodStock=database.ref('food');
-  foodStock.on("20",readStock);
+  foodStock.on("value",readStock);
   
 }
 
@@ -29,27 +29,27 @@ text("NOTE: PRESS UP_ARROW KEY TO FEED DRAGO MILK",220,220);
   if(keyWentDown(UP_ARROW))
   {
     writeStock(food);
-    dog.aadImage("images/dog.png");
+    dog.addImage(happyDogImage);
   }
   else
   {
-    happyDog=addImage(happyDogImage);
+    dog.addImage(dogImage);
   }
   //add styles here
    
 } 
  function writeStock(x)
  {
-   if(food<0)
+   if(x<=0)
    {
-     food=0
+     x=0
    }
 
    else
    {
-     food=food-1;
+     x=x-1;
    }
-  database.ref('food/foodStock').update({
+  database.ref('/').update({
     food:x
   })
 }
@@ -57,8 +57,4 @@ text("NOTE: PRESS UP_ARROW KEY TO FEED DRAGO MILK",220,220);
 function readStock(data)
  {
    food=data.val();
-   food.x=position.x;
-   food.y=position.y;
-   }
-
-
+ }
