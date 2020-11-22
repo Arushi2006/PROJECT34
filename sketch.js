@@ -1,60 +1,47 @@
-var dog,happyDog,database,food,foodStock;
-var database;
-function preload()
+class Food
 {
-  dogImage=loadImage("images/Dog.png");
-  happyDogImage=loadImage("images/dogImg1.png");
-}
+constructor()
+{
+  var lastFed,foodS,
 
-function setup() {
-  createCanvas(1200, 1200);
-  database=firebase.database();
-  dog=createSprite(400,450,50,50);
-  dog.addImage(dogImage);
-  foodStock=database.ref('food');
-  foodStock.on("value",readStock);
+  this.image=loadImage("images/milk.png")
   
 }
+display()
+{
+var x=80;
+var y=100;
 
+   fill(255,255,254);
+   textSize(15);
+   imageMode(CENTER);
+   this.image(this.image,720,220,70,70);
 
-function draw() {  
-   background(rgb(46,139,87));
-  drawSprites();
-     
-textSize(25);
-fill("white");
-stroke(20);
-text("NOTE: PRESS UP_ARROW KEY TO FEED DRAGO MILK",220,220);
-
-  if(keyWentDown(UP_ARROW))
-  {
-    writeStock(food);
-    dog.addImage(happyDogImage);
-  }
-  else
-  {
-    dog.addImage(dogImage);
-  }
-  //add styles here
-   
-} 
- function writeStock(x)
- {
-   if(x<=0)
+   if(this.foodS!=0)
    {
-     x=0
+     for(var i=0;i<this.foodS;i++)
+     {
+       if(i%10==0)
+       {
+         x=80;
+         y=y+50;
+       }
+       image(this.image,x,y,50,50);
+       x=x+30;
+     }
    }
 
+   if(lastFed>=12)
+   {
+     text("Last Feed:"+lastFed%12+"PM",350,250);
+   }
+   else if(LastFed==0)
+   {
+     text("Last Feed : 12AM",350,350);
+   }
    else
    {
-     x=x-1;
+    text("Last Feed:"+lastFed+"AM",350,350);
    }
-  database.ref('/').update({
-    food:x
-  })
+  }
 }
-
-function readStock(data)
- {
-   food=data.val();
- }
